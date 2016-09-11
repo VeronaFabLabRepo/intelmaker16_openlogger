@@ -8,12 +8,12 @@ OpenLogger can view the measures realtime and create reports, charts, statistics
 
 OpenLogger can support different embedded linux boards.
 
-* Raspberry Pi
-* Banana Pi/Pro
-* Beaglebone Black
-* Arietta
-* Galileo
-* Intel Edison
+* Raspberry Pi (Tested)
+* Banana Pi/Pro (Not tested)
+* Beaglebone Black (Not tested)
+* Arietta (Todo)
+* Galileo (Not tested)
+* Intel Edison (Tested)
 
 ## Deploy ##
 
@@ -34,8 +34,7 @@ usage: openlogger.py [-h] [--machine MACHINE] [--daemonize DAEMONIZE]
 optional arguments:
   -h, --help            show this help message and exit
   --machine MACHINE     Arietta, BoardMRAA(Rasberry,Banana,Intel,Beagle,etc..), IntelEdison, X86Test
-  --daemonize DAEMONIZE
-                        Run daemon
+  --daemonize DAEMONIZE Run daemon, True / False
 
 ```
 
