@@ -1,2 +1,1 @@
-# OpenLogger
-
+OpenLogger

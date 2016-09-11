@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>OpenLogger</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap theme -->
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+
+    <link href="css/bootstrap-table.min.css" rel="stylesheet" type="text/css"/>
+
+</head>
+
+<body role="document">
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false"
+                    aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index.html">OpenLogger</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/config.html">Setup</a></li>
+                <li class="active"><a href="/tables.html">Logger</a></li>
+                <li><a href="/graphs.html">Graphics</a></li>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+<br>
+
+<div class="container fluid" role="main">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="page-header">
+                <h1>Measurements:</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Tool
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <input id="reset" type="button" class="btn btn-danger" value="Reset value">
+                    <input id="csv" type="button" class="btn btn-info" value="CSV">
+                    <input id="db" type="button" class="btn btn-info" value="DB">
+                    <br>
+                    <h3>Data row elaboration</h3>
+                    <input type="checkbox" id="dati_raw">
+                    <br>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                Table configuration
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6">
+                    <div style="width:20%">
+                        <table id="null">
+                            <tr>
+                                <td style="padding-right:2em">
+                                    <label>
+                                        Start date:
+                                    </label>
+                                    <input id="data_start" type="date" class="form-control" value="2016-03-21">
+                                </td>
+                                <td>
+                                    <label>
+                                        Start hour:
+                                    </label>
+                                    <input id="hour_start" type="time" class="form-control" value="16:00">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding-right:2em">
+                                    <label>
+                                        End date:
+                                    </label>
+                                    <input id="data_end" type="date" class="form-control" value="2016-03-21">
+                                </td>
+                                <td>
+                                    <label>
+                                        End hour:
+                                    </label>
+                                    <input id="hour_end" type="time" class="form-control" value="23:00">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <br>
+                    <input id="but_24" type="button" class="btn btn-warning" value="24 Hours">
+                    <input id="but_1w" type="button" class="btn btn-warning" value="1 Week">
+                    <input id="but_1m" type="button" class="btn btn-warning" value="1 Month">
+                    <br>
+                    <br>
+                    <input id="reload" type="button" class="btn btn-primary" value="Reload table">
+                </div>
+                <div class="col-md-6">
+                    <div id="filtro_pin">
+                        <label>
+                            <b>Filter pin</b>
+                        </label>
+                        <br>
+                        <input type="checkbox" id="filtro_sw">
+                        <div class="row" id="container_pin">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                Data table
+            </div>
+            <div class="panel-body">
+                <div class="col-md-6" style="padding-left:0em">
+                    <table id="table" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                        <tr>
+                            <th>IDIO</th>
+                            <th>Data</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/lib/jquery.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap-table.min.js"></script>
+<script src="js/lib/bootbox.min.js"></script>
+
+<script src="js/lib/jquery.dataTables.min.js"></script>
+<script src="js/lib/dataTables.bootstrap.min.js"></script>
+
+
+<link href="css/switch/bootstrap-switch.min.css" rel="stylesheet">
+<script src="js/lib/switch/bootstrap-switch.min.js"></script>
+
+
+<script src="js/script/tables_js.js"></script>
+
+</body>
+</html>

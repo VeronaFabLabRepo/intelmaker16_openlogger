@@ -1,0 +1,12 @@
+[Unit]
+Description=OpenLogger
+
+[Service]
+Type=simple
+WorkingDirectory=/var/OpenLogger/
+ExecStart=/usr/bin/python2 openlogger.py --daemonize=True --machine=IntelEdison
+PIDFile=/var/run/openlogger.pid
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
