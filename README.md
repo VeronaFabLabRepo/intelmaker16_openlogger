@@ -27,14 +27,21 @@ $ pip install enum
 $ pip install tornado
 
 $ pip install psutil
+
+$ python openlogger.py  --help
+usage: openlogger.py [-h] [--machine MACHINE] [--daemonize DAEMONIZE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --machine MACHINE     Arietta, BoardMRAA(Rasberry,Banana,Intel,Beagle,etc..), IntelEdison, X86Test
+  --daemonize DAEMONIZE
+                        Run daemon
+
 ```
 
-
-
-## License ##	
-
+## License ##
 Read License Folder
 
-### Contatti ###
+## Contact ##
 
-Il progetto è stato incubato dall'[Associazione Verona FabLab](http://www.veronafablab.it)
+[Associazione Verona FabLab](http://www.veronafablab.it)
