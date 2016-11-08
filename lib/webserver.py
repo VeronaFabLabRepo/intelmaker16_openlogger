@@ -14,6 +14,7 @@ from tornado import web
 import sqlite3
 import json
 import csv
+from lib import IOConfig
 from lib import SqliteConnection as sqlc
 
 
@@ -21,6 +22,7 @@ from lib import SqliteConnection as sqlc
 #viene chiama dalla pagina delle configurazioni
 class set_conf(tornado.web.RequestHandler):
 	def get(self):
+		global currentOpenlogger
 		dati = []
 		valori = ["id","iopin","descrizione","tipo","moltiplicatore","additore","deviazione","ciclo","adr","porta_bus","enable"]
 		num_tab = int(("".join(self.request.arguments['num_tab'])))
@@ -45,8 +47,6 @@ class set_conf(tornado.web.RequestHandler):
 		iopin = c_db.exe("select iopin,id from ioconfig")
 		c_db.exe('delete from ioconfig')
 
-		print(iopin)
-		print(dati[0])
 		for pin in iopin:
 			if not (pin[0] in dati[0]):
 					id = c_db.exe('select id from ioconfig where iopin=\"'+str(pin[0])+'\"')
@@ -60,7 +60,26 @@ class set_conf(tornado.web.RequestHandler):
 			dati[2][cont]+"\",\""+dati[3][cont]+"\",\""+dati[4][cont]+"\",\""+dati[5][cont]+"\",\""+
 			dati[6][cont]+"\",\""+dati[7][cont]+"\",\""+dati[8][cont]+"\",\""+dati[9][cont]+"\",\""+dati[10][cont]+"\",\""+dati[11][cont]+"\",1)")
 			cont+=1
+
+		num_conf = c_db.exe("select max(id) from ioconfig")
+		conf = c_db.exe("select * from ioconfig")
+
 		c_db.close()
+
+		cont=1
+		num_conf = num_conf[0]
+		while(cont<=num_conf[0]):
+			currentOpenlogger.KillThread(cont)
+			cont+=1
+			print(cont)
+
+
+		for row in conf:
+			ioconfig = IOConfig.IOConfig(row)
+			currentOpenlogger.CreateThread(ioconfig)
+
+
+
 
 #restituisce tutte le configurazioni che ci sono nella tabella ioconfig
 #viene chiamata quando si accede alla pagina di configurazione degli I/O
@@ -110,7 +129,6 @@ class reset_config (tornado.web.RequestHandler):
 		c_db = sqlc.connessione_DB()
 		c_db.exe('delete from ioconfig')
 		c_db.close()
-		print("eliminato tutto")
 
 #cancella tutte i valori della tabella misure
 class reset_value_table(tornado.web.RequestHandler):
@@ -123,19 +141,19 @@ class reset_value_table(tornado.web.RequestHandler):
 #temporale impostata
 class get_csv(tornado.web.RequestHandler):
 	def get(self):
-		data_start = self.request.arguments["data_start"]
-		data_end = self.request.arguments["data_end"]
-		hour_start = self.request.arguments["hour_start"]
-		hour_end = self.request.arguments["hour_end"]
+		query = self.request.arguments["query"]
 
 		c_db = sqlc.connessione_DB()
-		val = c_db.exe("select * from misure where t_timestamp>=\""+data_start[0]+" "+hour_start[0]+"\" and t_timestamp<= \""+data_end[0]+" "+hour_end[0]+"\"")
+		#val = c_db.exe("select * from misure where t_timestamp>=\""+data_start[0]+" "+hour_start[0]+"\" and t_timestamp<= \""+data_end[0]+" "+hour_end[0]+"\"")
+		val = c_db.exe(query[0])
 		c_db.close()
 
 		if(len(val)>0):
-			with open('CSV.csv', 'wb+') as dato:
-				file = csv.writer(dato , delimiter=',')
+			with open('CSV.csv', 'w+') as fcsv:
+				fcsv.write('idio,t_timestamp,valore\n')
+				file = csv.writer(fcsv , delimiter=',')
 				file.writerows(val)
+				fcsv.close()
 
 #restituisce i valori per la tabella nella finestra
 #temporale selezionata
@@ -213,14 +231,15 @@ class dati_table_misure(tornado.web.RequestHandler):
 	def get(self):
 		query = self.request.arguments["query"]
 		flag_raw= self.request.arguments["elaborazione_raw"]
-		print(query[0])
+
 		c_db = sqlc.connessione_DB()
 		righe = c_db.exe(str(query[0]))
 		operator = c_db.exe("select id,additore,moltiplicatore from ioconfig")
 		c_db.close()
 
 		dict = []
-		if(flag_raw):
+		if(flag_raw[0] == 'true'):
+
 			for x in righe :
 				rigajs={
 					"idio" :  x[0],
@@ -308,10 +327,6 @@ class useful_def():
 		hour_start_g = request.arguments["hour_start"]
 		hour_end_g = request.arguments["hour_end"]
 
-		print(data_start_g)
-		print(data_end_g)
-		print(hour_start_g)
-		print(hour_end_g)
 
 		c_db = sqlc.connessione_DB()
 		query = c_db.exe("select id from ioconfig")
@@ -322,16 +337,23 @@ class useful_def():
 		for x in query:
 			line_iopin.append(x[0])
 
+		linea_grafico=[]
 		linee_grafico=[]
-		cp = list(line_iopin)
-		for val_iopin in cp:
+		#cp = list(line_iopin)
+
+		for val_iopin in line_iopin:
 			#val = c_db.exe("select idio,substr(t_timestamp,0,17) || ':00' as ts,avg(valore) as vl from misure where idio=\""+str(val_iopin)+"\" and ts>=\""+data_start_g[0]+" "+hour_start_g[0]+"\" and ts<= \""+data_end_g[0]+" "+hour_end_g[0]+"\"  GROUP BY idio,ts     ")
 			val = c_db.exe("select idio,t_timestamp,valore from misure where idio=\""+str(val_iopin)+"\" and t_timestamp>=\""+data_start_g[0]+" "+hour_start_g[0]+"\" and t_timestamp<= \""+data_end_g[0]+" "+hour_end_g[0]+"\"")
 			#in questo modo non inserisco array vuoti
 			if(len(val) > 0):
 				#modifica il valore row
-				val[2]=useful_def.calc(operator,val[0],val[2])
-				linee_grafico.append(val)
+				for row in val:
+					row = list(row)
+					row[2]=str(useful_def.calc(operator,row[0],row[2]))
+					linea_grafico.append(row)
+
+				linee_grafico.append(linea_grafico)
+				linea_grafico = []
 			else:
 				line_iopin.remove(val_iopin)
 

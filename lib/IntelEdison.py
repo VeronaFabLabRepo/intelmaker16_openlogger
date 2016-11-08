@@ -47,10 +47,6 @@ class IntelEdison(Hardware.Hardware):
 		self.setValueToCloud(ioconfig,v)
 		return v
 
-        def setValueToCloud(self,ioconfig,value):
-		id = "openloggerid" + str(ioconfig.idio)
-		output = subprocess.Popen (["/usr/bin/iotkit-admin","observation", id, str(value)])
-		print output
 
 
 

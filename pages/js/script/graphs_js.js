@@ -38,7 +38,7 @@ $(document).ready(function () {
             },
 
             title: {
-                text: 'Grafico'
+                text: 'Graphic'
             },
             exporting: {
                 enabled: false
@@ -91,44 +91,13 @@ $(document).ready(function () {
     }
     function structure_graphics(i,description,iopin,um) {
         $('#container_ghaphs_' + i).highcharts('StockChart', {
-            chart: {
-                zoomType: 'x,y'
-            },
-            rangeSelector: {
-
-                buttons: [{
-                    type: 'day',
-                    count: 1,
-                    text: '1d'
-                }, {
-                    type: 'week',
-                    count: 1,
-                    text: '1w'
-                }, {
-                    type: 'month',
-                    count: 1,
-                    text: '1m'
-                }, {
-                    type: 'month',
-                    count: 6,
-                    text: '6m'
-                }, {
-                    type: 'year',
-                    count: 1,
-                    text: '1y'
-                }, {
-                    type: 'all',
-                    text: 'All'
-                }],
-                selected: 3
-            },
             yAxis: {
                 title: {
                     text: ''+um
                 }
             },
             title: {
-                text: 'Grafico Pinout '+iopin+' '+description
+                text: 'Graphic Pinout '+iopin+' '+description
             },
             exporting: {
                 enabled: false
@@ -326,8 +295,7 @@ $(document).ready(function () {
         name_linee.forEach(function (valore) {
             chart.addSeries({
                 name: valore,
-                data: valori_linee[cont_linee],
-                turboThreshold:10000
+                data: valori_linee[cont_linee]
             });
             cont_linee++;
         });
@@ -346,8 +314,7 @@ $(document).ready(function () {
             cont++;
         });
         cont = 0;
-
-
+        console.log(valori_linee);
         //aggiorno tutti i valori di ogni serie
         for (var i = 0; i < cont_linee; i++) {
             chart.series[i].update({data: valori_linee[i]}, true);
@@ -361,12 +328,12 @@ $(document).ready(function () {
         var c = time.split(/\D+/);
         //il --b[2] serve perche il calendario viene considerato da 00 e non da 01
         if(flag){
-            var date = Date.UTC(b[0], --b[1], b[2], c[0], c[1], c[2]);
+            var date_time = Date.UTC(b[0], --b[1], b[2], c[0], c[1], c[2]);
         }
         else{
-            var date = Date.UTC(b[1], --b[2], b[3], c[1], c[2], c[3]);
+            var date_time = Date.UTC(b[1], --b[2], b[3], c[1], c[2], c[3]);
         }
-        return date;
+        return date_time;
     }
 
 });

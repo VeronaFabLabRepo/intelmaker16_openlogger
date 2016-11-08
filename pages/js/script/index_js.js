@@ -1,6 +1,6 @@
-
+window.status_popover_time=false;
+window.check_value = 0;
 $(document).ready(function(){
-
     $("#set_time_b").popover({
         html:true,
         content: '<input id="set_time_i" type="datetime-local" class="form-control" value="2016-09-08T12:18:58.001">' +
@@ -21,8 +21,16 @@ $(document).ready(function(){
                 "datetime":datetime
             }
         });
-        $("#set_time_b").popover('hide');
+        $("#set_time_b").popover('hide');//quando si clicca il bottone set si chiude il popover
     });
+
+    $("#set_time_b").on('show.bs.popover',function(){
+        window.status_popover_time=true;
+    }).on('hide.bs.popover',function(){
+        window.status_popover_time=false;
+        window.check_value=0;
+    });
+
     get_row_tab();
 
     setInterval(set_bar,1000);
@@ -41,8 +49,12 @@ $(document).ready(function(){
                 $("#bar_disk").css('width',json_response["disk"].percent+'%');
                 $("#bar_disk").html("Disk:"+json_response["disk"].percent+'%');
                 $("#data_ora_now").html(""+json_response["datetime"].date+" "+json_response["datetime"].time);
-                $("#set_time_b").popover().parent().find("#set_time_i").val(""+format_date()+"T"+json_response["datetime"].time+".001");
-
+                if(window.status_popover_time != true || window.check_value == 0) {
+                    if(window.status_popover_time==true) {
+                        window.check_value = 1;
+                    }
+                    $("#set_time_b").popover().parent().find("#set_time_i").val("" + format_date() + "T" + json_response["datetime"].time + ".001");
+                }
                 var table = $("#table").DataTable();
                 valori = json_response["valori_thread"]
                 for(var i =0; i<valori.length;i++){

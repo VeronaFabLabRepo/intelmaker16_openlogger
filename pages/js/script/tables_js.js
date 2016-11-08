@@ -57,15 +57,13 @@ $(document).ready(function () {
         var hour_start = document.getElementById("hour_start").value;
         var data_end = document.getElementById("data_end").value;
         var hour_end = document.getElementById("hour_end").value;
-
+        query = "select idio,t_timestamp,valore from misure where t_timestamp>=\"" + data_start + " " + hour_start + "\" and t_timestamp<= \"" + data_end + " " + hour_end + "\"";
+        new_query = set_query(query);
         $.ajax({
             url: "get_csv",
             type: 'GET',
             data: {
-                "data_start": data_start,
-                "hour_start": hour_start,
-                "data_end": data_end,
-                "hour_end": hour_end
+                "query":new_query
             },
             success: function (json) {
                 window.location.href = "../static/CSV.csv"
@@ -177,7 +175,7 @@ $(document).ready(function () {
 
     function impost_query(data_start,hour_start,data_end,hour_end){
         query = "select idio,t_timestamp,valore from misure where t_timestamp>=\"" + data_start + " " + hour_start + "\" and t_timestamp<= \"" + data_end + " " + hour_end + "\"";
-        set_query(query)
+        call_combo(set_query(query));
     }
 
     function set_query(query){
@@ -197,9 +195,10 @@ $(document).ready(function () {
             //query = "select idio,t_timestamp,valore from misure where t_timestamp>=\"" + data_start + " " + hour_start + "\" and t_timestamp<= \"" + data_end + " " + hour_end + "\"";
         }
         
-        call_combo(query);
+        return query;
     }
     function call_combo(query) {
+        console.log($('#dati_raw').bootstrapSwitch('state'));
         $.ajax({
             url:"/dati_table_misure",
             type:'GET',

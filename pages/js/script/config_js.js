@@ -1,6 +1,6 @@
 var currentTab;
 // solo se viene cambiato il nome della tab come reference. La lunghezza copre tutto il nome con il primo numero
-var LUNGH_NAME_TAB = 4; //parlare con zambo
+var LUNGH_NAME_TAB = 4;
 var num_tab;
 var nameTabCurrent;
 
@@ -33,8 +33,7 @@ $(document).ready(function () {
 
     });
 
-    //capire meglio come funziona e sentire il zambo se va bene
-    //http://jsfiddle.net/vinodlouis/pb6EM/1/
+
     //evento che cancella le tabelle
         $('#tabs').on('click', '#del', function () {
             var  object = this;
@@ -65,7 +64,7 @@ $(document).ready(function () {
             //location.reload();
             alert("saved configuration");
             get_row_tab();
-        }, 250); //controllare se va bene il tempo messo
+        }, 250); 
     });
 
     document.select = function (value) {
